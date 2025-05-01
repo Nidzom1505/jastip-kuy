@@ -1,5 +1,40 @@
-# Vue 3 + Vite
+# Jastip Kuy - Vue 3 + Vite Project
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This project uses **Vue 3** with **Vite** as the build tool, designed to quickly spin up a modern Vue application. The template uses Vue 3 `<script setup>` SFCs.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## 🚀 Getting Started
+
+Ikuti langkah-langkah berikut untuk meng-clone dan menjalankan project ini di lokal:
+
+### 1. Clone Repository
+Jika belum meng-clone repository, jalankan perintah berikut:
+```bash
+git clone https://github.com/Nidzom1505/jastip-kuy.git
+cd jastip-kuy
+2. Install Dependencies
+Setelah meng-clone project, jalankan perintah untuk menginstall semua dependencies:
+
+bash
+Salin
+Edit
+npm install
+3. Jalankan Development Server
+Setelah semua dependensi terinstall, jalankan server development dengan perintah:
+
+bash
+Salin
+Edit
+npm run dev
+Buka browser dan akses aplikasi di alamat:
+
+arduino
+Salin
+Edit
+http://localhost:5173/
+4. Update Project (Jika Sudah Pernah Clone Sebelumnya)
+Jika kamu sudah pernah meng-clone repository sebelumnya dan hanya ingin mendapatkan update terbaru dari GitHub, gunakan perintah berikut untuk pull perubahan terbaru:
+
+bash
+Salin
+Edit
+git pull origin master
