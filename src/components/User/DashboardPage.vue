@@ -1,5 +1,21 @@
-<script></script>
+<template>
+    <div class="display-flex">
+        <div>
+            <Header />
+        </div>
 
-<template>hallo ini dasboard</template>
+        <div>
+            hallo ini dasboard
+        </div>
+    </div>
+</template>
 
-<style></style>
+<script>
+import Header from '../Header.vue';
+
+export default {
+    components: {
+        Header
+    }
+}
+</script>
