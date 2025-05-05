@@ -1,14 +1,27 @@
-import LoginPage from "./components/LoginPage.vue";
-import SignUp from "./components/SignUp.vue";
-import ProfilePage from "./components/ProfilePage.vue";
+import LoginPage from "./components/Auth/LoginPage.vue";
+import SignUp from "./components/Auth/SignUp.vue";
+import ProfilePage from "./components/User/ProfilePage.vue";
+import Dashboard from "./components/User/DashboardPage.vue";
+import MakananPage from "./components/Shop/MakananPage.vue";
+import MinumanPage from "./components/Shop/MinumanPage.vue";
+import PembayaranPage from "./components/Shop/PembayaranPage.vue";
+import SiangTitip from "./components/Shop/SiangTitip.vue";
+import KeranjangPage from "./components/User/KeranjangPage.vue";
+import RiwayatPage from "./components/User/RiwayatPage.vue";
+import WishList from "./components/User/WishList.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
+    name: "DashboardPage",
+    component: Dashboard,
+    path: "/",
+  },
+  {
     name: "LoginPage",
     component: LoginPage,
-    path: "/",
+    path: "/login",
   },
   {
     name: "SignUp",
@@ -19,6 +32,41 @@ const routes = [
     name: "ProfilePage",
     component: ProfilePage,
     path: "/profile",
+  },
+  {
+    name: "MakananPage",
+    component: MakananPage,
+    path: "/makanan",
+  },
+  {
+    name: "MinumanPage",
+    component: MinumanPage,
+    path: "/minuman",
+  },
+  {
+    name: "PembayaranPage",
+    component: PembayaranPage,
+    path: "/bayar",
+  },
+  {
+    name: "SiangTitip",
+    component: SiangTitip,
+    path: "/siangtitip",
+  },
+  {
+    name: "KeranjangPage",
+    component: KeranjangPage,
+    path: "/keranjang",
+  },
+  {
+    name: "RiwayatPage",
+    component: RiwayatPage,
+    path: "/riwayat",
+  },
+  {
+    name: "WishList",
+    component: WishList,
+    path: "/wishlist",
   },
 ];
 

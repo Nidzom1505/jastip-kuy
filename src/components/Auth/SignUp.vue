@@ -72,7 +72,7 @@ export default {
 
             if (result.status === 201) {
                 console.log("Berhasil!");
-                this.$router.push("/profile");
+                this.$router.push("/");
             } else {
                 console.log("Gagal!");
             }

@@ -1,0 +1,1 @@
+<template>Ini WishList</template>

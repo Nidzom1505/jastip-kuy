@@ -35,7 +35,7 @@
             <p class="mt-10 text-center text-sm/6 text-gray-500">
                 Belum punya akun?
                 {{ ' ' }}
-                <router-link class="font-semibold text-indigo-600 hover:text-indigo-500" to="/signup">Sign Up</router-link>
+                <router-link class="font-semibold text-indigo-600 hover:text-indigo-500" to="/signup">Sign In</router-link>
             </p>
         </div>
     </div>
@@ -59,7 +59,7 @@ export default {
 
             if (result.status === 200 && result.data.length > 0) {
                 console.log("Berhasil!");
-                this.$router.push("/profile");
+                this.$router.push("/");
             } else {
                 console.log("Gagal!");
             }
