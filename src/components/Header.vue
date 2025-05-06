@@ -3,7 +3,7 @@
         <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
             <div class="flex h-16 items-center justify-between">
                 <div class="md:flex md:items-center md:gap-12">
-                    <a class="block text-teal-600 dark:text-teal-600" href="#">
+                    <a class="block text-teal-600 dark:text-teal-600" href="/">
                         <span class="sr-only">Home</span>
                         <img class="h-8" src="/src/assets/vue.svg" alt="Logo" />
                     </a>
@@ -14,21 +14,21 @@
                         <ul class="flex items-center gap-6 text-xl">
                             <li>
                                 <a class="text-white transition hover:text-white/75 font-bold"
-                                    href="#">
+                                    href="/keranjang">
                                     Keranjang
                                 </a>
                             </li>
 
                             <li>
                                 <a class="text-white transition hover:text-white/75 font-bold"
-                                    href="#">
+                                    href="/wishlist">
                                     Wishlist
                                 </a>
                             </li>
 
                             <li>
                                 <a class="text-white transition hover:text-white/75 font-bold"
-                                    href="#">
+                                    href="/riwayat">
                                     Riwayat
                                 </a>
                             </li>
