@@ -10,12 +10,21 @@
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" action="#" method="POST">
                 <div>
-                    <label for="username" class="block text-sm/6 font-medium text-gray-900">Username</label>
+                    <label for="name" class="block text-sm/6 font-medium text-gray-900">Nama Lengkap</label>
                     <div class="mt-2">
-                        <input type="text" name="text" id="username" autocomplete="name" required="" v-model="user"
+                        <input type="text" name="text" id="name" autocomplete="name" required="" v-model="name"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                     </div>
                 </div>
+
+                <div>
+                    <label for="username" class="block text-sm/6 font-medium text-gray-900">Username</label>
+                    <div class="mt-2">
+                        <input type="text" name="text" id="username" autocomplete="username" required="" v-model="user"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                    </div>
+                </div>
+
                 <div>
                     <label for="email" class="block text-sm/6 font-medium text-gray-900">Email</label>
                     <div class="mt-2">
@@ -25,9 +34,28 @@
                 </div>
 
                 <div>
+                    <label for="phone" class="block text-sm/6 font-medium text-gray-900">No Telepon</label>
+                    <div class="mt-2">
+                        <input type="phone" name="phone" id="phone" autocomplete="email" required="" v-model="telp"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                    </div>
+                </div>
+
+                <div>
                     <label for="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
                     <div class="mt-2">
-                        <input type="password" name="password" id="password" autocomplete="current-password" required="" v-model="password"
+                        <input type="password" name="password" id="password" autocomplete="current-password" required=""
+                            v-model="password"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                    </div>
+                </div>
+
+                <div>
+                    <label for="conPassword" class="block text-sm/6 font-medium text-gray-900">Konfirmasi
+                        Password</label>
+                    <div class="mt-2">
+                        <input type="password" name="password" id="conPassword" autocomplete="current-password"
+                            required="" v-model="conPassword"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                     </div>
                 </div>
@@ -50,33 +78,31 @@
 
 <script>
 import axios from 'axios';
+import User from '../../Service/User';
 
 export default {
     name: 'SignUp',
 
     data() {
         return {
+            name: '',
             user: '',
             email: '',
-            password: ''
+            telp: '',
+            password: '',
+            conPassword: ''
         }
     },
 
     methods: {
         async create() {
-            const result = await axios.post("http://localhost:3000/user", {
-                username: this.user,
-                email: this.email,
-                password: this.password
-            });
+            User.register(this.name, this.user, this.email, this.telp, this.password, this.conPassword);
 
-            if (result.status === 201) {
-                console.log("Berhasil!");
-                this.$router.push("/");
-            } else {
-                console.log("Gagal!");
+            if (true) {
+                this.$router.push("/login"); // Navigasi ke halaman login
             }
         }
     }
 }
+
 </script>

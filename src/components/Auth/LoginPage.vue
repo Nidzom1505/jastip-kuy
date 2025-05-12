@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import User from '../../Service/User';
 
 export default {
     name: 'LoginPage',
@@ -55,13 +55,10 @@ export default {
     },
     methods: {
         async login() {
-            const result = await axios.get(`http://localhost:3000/user?identifier=${this.user}&password=${this.password}`);
+            User.login(this.user, this.password)
 
-            if (result.status === 200 && result.data.length > 0) {
-                console.log("Berhasil!");
-                this.$router.push("/");
-            } else {
-                console.log("Gagal!");
+            if (true) {
+                this.$router.push("/"); 
             }
         }
     }

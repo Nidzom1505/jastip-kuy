@@ -1,6 +1,6 @@
 import LoginPage from "./components/Auth/LoginPage.vue";
 import SignUp from "./components/Auth/SignUp.vue";
-import ProfilePage from "./components/User/ProfilePage.vue";
+import EditPage from "./components/User/Profile/EditPage.vue";
 import Dashboard from "./components/User/DashboardPage.vue";
 import MakananPage from "./components/Shop/MakananPage.vue";
 import MinumanPage from "./components/Shop/MinumanPage.vue";
@@ -9,6 +9,7 @@ import SiangTitip from "./components/Shop/SiangTitip.vue";
 import KeranjangPage from "./components/User/KeranjangPage.vue";
 import RiwayatPage from "./components/User/RiwayatPage.vue";
 import WishList from "./components/User/WishList.vue";
+import ProfilePage from "./components/User/ProfilePage.vue"
 
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -29,9 +30,9 @@ const routes = [
     path: "/signup",
   },
   {
-    name: "ProfilePage",
-    component: ProfilePage,
-    path: "/profile",
+    name: "EditPage",
+    component: EditPage,
+    path: "/profile/edit",
   },
   {
     name: "MakananPage",
@@ -67,6 +68,11 @@ const routes = [
     name: "WishList",
     component: WishList,
     path: "/wishlist",
+  },
+  {
+    name: "Profile",
+    component: ProfilePage,
+    path: "/profile",
   },
 ];
 

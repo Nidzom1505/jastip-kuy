@@ -2,8 +2,8 @@
     <div class="display-flex">
         <Header />
 
-        <div class="flex flex-col items-center justify-center mt-4">
-            <img class="h-25" src="/src/assets/vue.svg" alt="Logo" />
+        <div class="flex flex-col items-center justify-center mt-6">
+            <img class="h-auto max-w-full sm:h-40 md:h-60 lg:h-70" src="/src/assets/Frame 1.png" alt="Logo" />
             <div class="text-black font-bold text-3xl my-12">
                 <h2>INI TAGLINE</h2>
             </div>
