@@ -20,7 +20,8 @@
                 <div>
                     <label for="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
                     <div class="mt-2">
-                        <input type="password" name="password" id="password" autocomplete="current-password" required="" v-model="password"
+                        <input type="password" name="password" id="password" autocomplete="current-password" required=""
+                            v-model="password"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                     </div>
                 </div>
@@ -35,7 +36,8 @@
             <p class="mt-10 text-center text-sm/6 text-gray-500">
                 Belum punya akun?
                 {{ ' ' }}
-                <router-link class="font-semibold text-indigo-600 hover:text-indigo-500" to="/signup">Sign In</router-link>
+                <router-link class="font-semibold text-indigo-600 hover:text-indigo-500" to="/signup">Sign
+                    In</router-link>
             </p>
         </div>
     </div>
@@ -55,11 +57,19 @@ export default {
     },
     methods: {
         async login() {
-            User.login(this.user, this.password)
+            const success = await User.login(this.user, this.password);
 
             if (true) {
-                this.$router.push("/"); 
+                this.$router.push("/");
+            } else {
+                alert("Login gagal. Periksa kembali username dan password Anda.");
             }
+        }
+    },
+    mounted() {
+        const user = localStorage.getItem("user-info");
+        if (user) {
+            this.$router.push("/");
         }
     }
 }

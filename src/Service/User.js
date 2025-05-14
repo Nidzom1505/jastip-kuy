@@ -64,10 +64,18 @@ class User {
     );
 
     if (result.status === 200 && result.data.length > 0) {
+      const userData = result.data[0];
       console.log("Berhasil!");
+      localStorage.setItem("user-info", JSON.stringify(userData));
+      return true;
     } else {
       console.log("Gagal!");
     }
+  }
+
+  async logout() {
+    localStorage.removeItem("user-info");
+    console.log("Logout berhasil!");
   }
 }
 

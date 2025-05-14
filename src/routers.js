@@ -2,14 +2,14 @@ import LoginPage from "./components/Auth/LoginPage.vue";
 import SignUp from "./components/Auth/SignUp.vue";
 import EditPage from "./components/User/Profile/EditPage.vue";
 import Dashboard from "./components/User/DashboardPage.vue";
-import MakananPage from "./components/Shop/MakananPage.vue";
-import MinumanPage from "./components/Shop/MinumanPage.vue";
+import DailyEssentials from "./components/Shop/DailyEssentials.vue";
+import NgemilSantuy from "./components/Shop/NgemilSantuy.vue";
 import PembayaranPage from "./components/Shop/PembayaranPage.vue";
-import SiangTitip from "./components/Shop/SiangTitip.vue";
 import KeranjangPage from "./components/User/KeranjangPage.vue";
 import RiwayatPage from "./components/User/RiwayatPage.vue";
 import WishList from "./components/User/WishList.vue";
 import ProfilePage from "./components/User/ProfilePage.vue"
+import EditPass from "./components/User/Profile/EditPassword.vue"
 
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -35,24 +35,19 @@ const routes = [
     path: "/profile/edit",
   },
   {
-    name: "MakananPage",
-    component: MakananPage,
-    path: "/makanan",
+    name: "DailyEssentials",
+    component: DailyEssentials,
+    path: "/daily",
   },
   {
-    name: "MinumanPage",
-    component: MinumanPage,
-    path: "/minuman",
+    name: "NgemilSantuy",
+    component: NgemilSantuy,
+    path: "/ngemil",
   },
   {
     name: "PembayaranPage",
     component: PembayaranPage,
     path: "/bayar",
-  },
-  {
-    name: "SiangTitip",
-    component: SiangTitip,
-    path: "/siangtitip",
   },
   {
     name: "KeranjangPage",
@@ -73,6 +68,11 @@ const routes = [
     name: "Profile",
     component: ProfilePage,
     path: "/profile",
+  },
+  {
+    name: "Password",
+    component: EditPass,
+    path: "/profile/editpassword",
   },
 ];
 

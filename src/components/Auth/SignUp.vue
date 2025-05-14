@@ -99,7 +99,7 @@ export default {
             User.register(this.name, this.user, this.email, this.telp, this.password, this.conPassword);
 
             if (true) {
-                this.$router.push("/login"); // Navigasi ke halaman login
+                this.$router.push("/login");
             }
         }
     }

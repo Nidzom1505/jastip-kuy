@@ -1,4 +1,22 @@
 <template>
+    <div class="flex items-center text-sm/6 font-medium text-gray-900">
+        <div class="justify-between gap-2 mt-3 ml-3">
+            <a href="/profile"
+                class="inline-flex items-center border border-indigo-300 px-3 py-1.5 rounded-md text-indigo-500 hover:bg-indigo-50">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    class="h-6 w-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 16l-4-4m0 0l4-4m-4 4h18">
+                    </path>
+                </svg>
+                <span class="ml-1 font-bold text-lg">Back</span>
+            </a>
+        </div>
+        <div>
+            <h1>Edit Profil</h1>
+        </div>
+    </div>
+
     <div class="flex flex-col items-center justify-center mt-8">
         <img class="w-32 h-32 rounded-full mx-auto" src="https://loremflickr.com/320/320/girl" alt="">
         <div class="text-center mt-5">
@@ -53,9 +71,6 @@
         <button type="submit" v-on:click.prevent="login"
             class="mt-10 flex w-120 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Simpan
         </button>
-        <div>
-
-        </div>
     </div>
 </template>
 

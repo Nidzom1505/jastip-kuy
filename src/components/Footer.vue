@@ -9,7 +9,7 @@
                 <div class="w-40 pl-15 text-white font-bold text-xl">
                     <h3>H6A.4</h3>
                     <h3>MOBILE &</h3>
-                    <h3>WEB PROGRAMMING</h3>
+                    <h3><a href="https://www.instagram.com/">WEB</a> PROGRAMMING</h3>
                 </div>
             </div>
         </div>
