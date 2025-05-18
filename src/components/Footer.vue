@@ -3,13 +3,13 @@
         <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
             <div class="flex h-45 items-center justify-center">
                 <div
-                    class="border-r-1 border-solid  border-r-white w-40 pr-15 sm:px-3 lg:px-4">
-                    <img class="h-25" src="/src/assets/vue.svg" alt="Logo" />
+                    class="border-r-1 border-solid  border-r-white w-60 pr-15 sm:px-3 lg:px-4">
+                    <img class="h-25 w-50" src="/src/assets/logo.png" alt="Logo" />
                 </div>
                 <div class="w-40 pl-15 text-white font-bold text-xl">
                     <h3>H6A.4</h3>
                     <h3>MOBILE &</h3>
-                    <h3><a href="https://www.instagram.com/">WEB</a> PROGRAMMING</h3>
+                    <h3>WEB PROGRAMMING</h3>
                 </div>
             </div>
         </div>

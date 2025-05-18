@@ -12,7 +12,7 @@
                 <div>
                     <label for="email" class="block text-sm/6 font-medium text-gray-900">Email/Username</label>
                     <div class="mt-2">
-                        <input type="email" name="email" id="email" autocomplete="email" required="" v-model="user"
+                        <input type="text" name="user" id="user" autocomplete="user" v-model="user"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                     </div>
                 </div>
@@ -59,7 +59,7 @@ export default {
         async login() {
             const success = await User.login(this.user, this.password);
 
-            if (true) {
+            if (success) {
                 this.$router.push("/");
             } else {
                 alert("Login gagal. Periksa kembali username dan password Anda.");

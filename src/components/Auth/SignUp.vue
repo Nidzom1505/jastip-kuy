@@ -98,8 +98,10 @@ export default {
         async create() {
             User.register(this.name, this.user, this.email, this.telp, this.password, this.conPassword);
 
-            if (true) {
+            if ("oke") {
                 this.$router.push("/login");
+            } else {
+                return;
             }
         }
     }

@@ -5,7 +5,7 @@
                 <div class="md:flex md:items-center md:gap-12">
                     <a class="block text-teal-600 dark:text-teal-600" href="/">
                         <span class="sr-only">Home</span>
-                        <img class="h-8" src="/src/assets/vue.svg" alt="Logo" />
+                        <img class="h-8" src="/src/assets/logo.png" alt="Logo" />
                     </a>
                 </div>
 

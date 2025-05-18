@@ -7,10 +7,12 @@
                 <img class="object-cover w-20 h-20 mr-3 rounded-full" src="../../assets/vue.svg">
                 <div>
                     <p class="font-display mb-2 text-2xl font-semibold text-black" itemprop="author">
-                        M. Nidzom Imtiyaz
+                        {{ user ? user.nama : '' }}
                     </p>
                     <div class="mb-4 prose prose-sm text-gray-400">
-                        <p>nidzomtiyaz@gmail.com</p>
+                        <p>
+                            {{ user ? user.email : '' }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -45,11 +47,23 @@ export default {
         Header,
         Footer
     },
+    data() {
+        return {
+            user: null
+        }
+    },
     methods: {
         async out() {
             User.logout();
             this.$router.push("/login");
         }
+    },
+    mounted() {
+        User.getUser().then((user) => {
+            this.user = user;
+        }).catch((error) => {
+            console.error("Error fetching user data:", error);
+        });
     }
 }
 </script>
