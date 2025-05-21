@@ -13,22 +13,19 @@
                     <nav aria-label="Global">
                         <ul class="flex items-center gap-6 text-xl">
                             <li>
-                                <a class="text-white transition hover:text-white/75 font-bold"
-                                    href="/keranjang">
+                                <a class="text-white transition hover:text-white/75 font-bold" href="/keranjang">
                                     Keranjang
                                 </a>
                             </li>
 
                             <li>
-                                <a class="text-white transition hover:text-white/75 font-bold"
-                                    href="/wishlist">
+                                <a class="text-white transition hover:text-white/75 font-bold" href="/wishlist">
                                     Wishlist
                                 </a>
                             </li>
 
                             <li>
-                                <a class="text-white transition hover:text-white/75 font-bold"
-                                    href="/riwayat">
+                                <a class="text-white transition hover:text-white/75 font-bold" href="/riwayat">
                                     Riwayat
                                 </a>
                             </li>
@@ -44,9 +41,9 @@
                         </a>
 
                         <div class="hidden sm:flex">
-                            <a class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
+                            <a class="rounded-md px-5 py-2.5 text-sm font-medium text-teal-600 dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
                                 href="/profile">
-                                <img class="h-8" src="/src/assets/vue.svg" alt="Logo" />
+                                <img class="h-8" src="/src/assets/profile.svg" alt="Logo" />
                             </a>
                         </div>
                     </div>

@@ -59,7 +59,7 @@ export default {
         async login() {
             const success = await User.login(this.user, this.password);
 
-            if (success) {
+            if (success === true) {
                 this.$router.push("/");
             } else {
                 alert("Login gagal. Periksa kembali username dan password Anda.");

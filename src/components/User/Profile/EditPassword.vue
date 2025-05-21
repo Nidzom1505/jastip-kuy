@@ -1,14 +1,20 @@
 <template>
-    <div class="flex justify-between gap-2 mt-3 ml-3">
-        <a href="/profile"
-            class="inline-flex items-center border border-indigo-300 px-3 py-1.5 rounded-md text-indigo-500 hover:bg-indigo-50">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                class="h-6 w-6">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18">
-                </path>
-            </svg>
-            <span class="ml-1 font-bold text-lg">Back</span>
-        </a>
+    <div class="flex items-center justify-center text-sm/6 font-medium text-gray-900">
+        <div class="flex justify-between gap-2 mt-3 ml-3">
+            <a href="/profile"
+                class="inline-flex items-center border border-green px-3 py-1.5 rounded-md text-green hover:bg-indigo-50">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    class="h-6 w-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 16l-4-4m0 0l4-4m-4 4h18">
+                    </path>
+                </svg>
+                <span class="ml-1 font-bold text-lg">Back</span>
+            </a>
+        </div>
+        <div class="flex items-center justify-center w-full h-full text-xl font-bold">
+            <h1>Ubah Password</h1>
+        </div>
     </div>
     <div class="flex flex-col items-center justify-center mt-8">
         <div class="mt-5">
@@ -28,7 +34,7 @@
             </div>
         </div>
         <button type="submit" v-on:click.prevent="simpanPassword"
-            class="mt-10 flex w-120 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Simpan
+            class="mt-10 flex w-120 justify-center rounded-md bg-green px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-green/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Simpan
         </button>
     </div>
 </template>

@@ -30,18 +30,18 @@
             <div class="hidden md:block flex-row mb-20">
                 <ul class="flex items-center gap-14">
                     <li>
-                        <img class="bg-orange w-50 h-50 rounded-3xl border-b-8 border-solid border-b-neutral-300"
-                            src="/src/assets/vue.svg" alt="gambar3">
+                        <img class="w-80 h-80 rounded-3xl border-b-8 border-solid border-b-neutral-300"
+                            src="../../assets/1.jpg" alt="gambar3">
                     </li>
 
                     <li>
-                        <img class="bg-orange w-50 h-50 rounded-3xl border-b-8 border-solid border-b-neutral-300"
-                            src="/src/assets/vue.svg" alt="gambar4">
+                        <img class="w-80 h-80 rounded-3xl border-b-8 border-solid border-b-neutral-300"
+                            src="../../assets/2.jpg" alt="gambar4">
                     </li>
 
                     <li>
-                        <img class="bg-orange w-50 h-50 rounded-3xl border-b-8 border-solid border-b-neutral-300"
-                            src="/src/assets/vue.svg" alt="gambar5">
+                        <img class="w-80 h-80  rounded-3xl border-b-8 border-solid border-b-neutral-300"
+                            src="../../assets/3.jpg" alt="gambar5">
                     </li>
                 </ul>
             </div>

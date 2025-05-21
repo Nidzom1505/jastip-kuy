@@ -3,8 +3,8 @@
         <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
             <div class="flex h-45 items-center justify-center">
                 <div
-                    class="border-r-1 border-solid  border-r-white w-60 pr-15 sm:px-3 lg:px-4">
-                    <img class="h-25 w-50" src="/src/assets/logo.png" alt="Logo" />
+                    class="border-r-1 border-solid  border-r-white w-100 pr-15 sm:px-3 lg:px-4">
+                    <img class="h-25 w-75" src="/src/assets/logo.png" alt="Logo" />
                 </div>
                 <div class="w-40 pl-15 text-white font-bold text-xl">
                     <h3>H6A.4</h3>

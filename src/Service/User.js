@@ -47,10 +47,10 @@ class User {
     if (result.status === 201) {
       console.log("Berhasil!");
       alert("Berhasil mendaftar!");
-      return "oke";
+      return true;
     } else {
       console.log("Gagal!");
-      return;
+      return false;
     }
   }
 

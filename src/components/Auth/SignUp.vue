@@ -96,12 +96,10 @@ export default {
 
     methods: {
         async create() {
-            User.register(this.name, this.user, this.email, this.telp, this.password, this.conPassword);
+            const success = await User.register(this.name, this.user, this.email, this.telp, this.password, this.conPassword);
 
-            if ("oke") {
+            if (success) {
                 this.$router.push("/login");
-            } else {
-                return;
             }
         }
     }
