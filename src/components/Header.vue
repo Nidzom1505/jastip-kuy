@@ -35,13 +35,8 @@
 
                 <div class="flex items-center gap-4">
                     <div class="sm:flex sm:gap-4">
-                        <a class="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm dark:hover:bg-teal-500"
-                            href="#">
-                            <img class="h-8" src="/src/assets/vue.svg" alt="Logo" />
-                        </a>
-
                         <div class="hidden sm:flex">
-                            <a class="rounded-md px-5 py-2.5 text-sm font-medium text-teal-600 dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
+                            <a class="rounded-md px-5 py-2.5 text-sm font-medium text-teal-600 dark:text-white dark:hover:text-white/75"
                                 href="/profile">
                                 <img class="h-8" src="/src/assets/profile.svg" alt="Logo" />
                             </a>

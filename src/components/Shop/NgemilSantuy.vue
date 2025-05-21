@@ -33,9 +33,9 @@
                         <span class="text-gray-400">Gambar</span>
                     </div>
                     <div class="font-semibold text-lg mb-2">{{ produk.nama }}</div>
-                    <div class="mb-2 text-indigo-700 font-bold">Rp {{ produk.harga.toLocaleString() }}</div>
+                    <div class="mb-2 font-bold">Rp {{ produk.harga.toLocaleString() }}</div>
                     <button @click="masukkanKeranjang(produk)"
-                        class="mt-auto bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded font-semibold">
+                        class="mt-auto bg-green hover:bg-green/90 text-white px-4 py-2 rounded font-semibold">
                         Masukkan Keranjang
                     </button>
                 </div>
