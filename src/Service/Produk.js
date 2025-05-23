@@ -6,25 +6,28 @@ class Produk {
     return res.data;
   }
 
-  async getAllProduk2() {
-    const res = await axios.get("http://localhost:3000/produk2");
-    return res.data;
-  }
-
   async getKeranjang() {
-    const res = await axios.get(`http://localhost:3000/keranjang`);
+    const userInfo = localStorage.getItem("user-info");
+    const userId = JSON.parse(userInfo).id;
+    const res = await axios.get(
+      `http://localhost:3000/keranjang?userId=${userId}`
+    );
     return res.data;
   }
 
   async addToKeranjang(produk) {
+    const userInfo = localStorage.getItem("user-info");
+    const userId = JSON.parse(userInfo).id;
+
     const cek = await axios.get(
-      `http://localhost:3000/keranjang?id=${produk.id}`
+      `http://localhost:3000/keranjang?produkId=${produk.id}&userId=${userId}`
     );
     if (cek.data.length === 0) {
       const { id, ...produkTanpaId } = produk;
       const res = await axios.post(`http://localhost:3000/keranjang`, {
         ...produkTanpaId,
         produkId: id,
+        userId,
       });
       return res.data;
     }

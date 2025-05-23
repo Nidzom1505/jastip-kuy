@@ -4,8 +4,8 @@
     <div class="flex h-[calc(100vh-64px)]">
         <!-- Sidebar Kiri: Filter -->
         <aside class="w-60 bg-gray-100 border-r border-gray-200 flex-shrink-0 p-6">
-            <h2 class="font-bold mb-4">Filter</h2>
-            <ul class="space-y-2">
+            <!-- <h2 class="font-bold mb-4">Filter</h2> -->
+            <!-- <ul class="space-y-2">
                 <li>
                     <button @click="filterKategori = 'makanan'"
                         :class="filterKategori === 'makanan' ? 'bg-gray-300' : ''"
@@ -20,7 +20,7 @@
                     <button @click="filterKategori = ''"
                         class="w-full text-left py-2 px-3 rounded hover:bg-gray-200 font-medium">Semua</button>
                 </li>
-            </ul>
+            </ul> -->
         </aside>
 
         <!-- Konten Tengah (scrollable) -->
@@ -82,15 +82,16 @@ export default {
     components: { Header, Footer },
     data() {
         return {
-            produk2: [],
-            filterKategori: '',
+            produk: [],
+            filterKategori: 'cemilan', // 'ngemil', 'makanan', 'minuman', atau ''
             sortBy: '',
             keranjang: []
         }
     },
     computed: {
         produkTersaring() {
-            let hasil = this.produk2;
+            let hasil = this.produk;
+            // Filter kategori sesuai kebutuhan halaman
             if (this.filterKategori) {
                 hasil = hasil.filter(p => p.kategori === this.filterKategori);
             }
@@ -106,9 +107,8 @@ export default {
         }
     },
     methods: {
-        async fetchProduk2() {
-            // Misal ProdukService.getAllNgemil() jika ingin khusus ngemil, atau filter di sini
-            this.produk2 = await ProdukService.getAllProduk2();
+        async fetchProduk() {
+            this.produk = await ProdukService.getAll();
         },
         async masukkanKeranjang(produk) {
             await ProdukService.addToKeranjang(produk);
@@ -119,7 +119,7 @@ export default {
         }
     },
     mounted() {
-        this.fetchProduk2();
+        this.fetchProduk();
         this.fetchKeranjang();
     }
 }

@@ -86,17 +86,20 @@ export default {
     data() {
         return {
             produk: [],
-            filterKategori: '',
+            filterKategori: "",
             sortBy: '',
             keranjang: []
         }
     },
     computed: {
         produkTersaring() {
-            let hasil = this.produk;
+            let hasil = this.produk.filter(
+                p => p.kategori === 'makanan' || p.kategori === 'minuman'
+            );
             if (this.filterKategori) {
                 hasil = hasil.filter(p => p.kategori === this.filterKategori);
             }
+
             if (this.sortBy === 'termurah') {
                 hasil = [...hasil].sort((a, b) => a.harga - b.harga);
             } else if (this.sortBy === 'termahal') {
