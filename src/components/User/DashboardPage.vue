@@ -10,16 +10,18 @@
             <div class="hidden md:block flex-row mb-20">
                 <ul class="flex items-center gap-14">
                     <li
-                        class="bg-orange w-60 h-60 rounded-3xl border-b-8 border-solid border-b-neutral-300 flex justify-center items-center">
+                        class="bg-orange1 w-60 h-60 rounded-3xl border-b-8 border-solid border-b-neutral-300 flex justify-center items-center">
                         <a href="/daily">
-                            <img class="w-40 h-40" src="/src/assets/vue.svg" alt="gambar1">
+                            <img class="w-40 h-40" src="/src/assets/daily.svg" alt="gambar1">
+                            <h2 class="text-white font-bold flex justify-center items-center mt-5">Daily Essentials</h2>
                         </a>
                     </li>
 
                     <li
                         class="bg-orange w-60 h-60 rounded-3xl border-b-8 border-solid border-b-neutral-300 flex justify-center items-center">
                         <a href="/ngemil">
-                            <img class="w-40 h-40" src="/src/assets/vue.svg" alt="gambar2">
+                            <img class="w-40 h-40" src="/src/assets/cemil.svg" alt="gambar2">
+                            <h2 class="text-white font-bold flex justify-center items-center mt-5">Ngemil Santuy</h2>
                         </a>
                     </li>
                 </ul>
@@ -54,22 +56,14 @@
 <script>
 import Header from '../Header.vue';
 import Footer from '../Footer.vue';
+// import { seedProduk } from '@/Service/IndexDB/MasukProduk';
+
+// seedProduk();
 
 export default {
     components: {
         Header,
         Footer
-    },
-    mounted() {
-        try {
-            const user = JSON.parse(localStorage.getItem("user-info"));
-            if (!user) {
-                this.$router.push("/login");
-            }
-        } catch (error) {
-            console.error("Data di localStorage tidak valid:", error);
-            this.$router.push("/login");
-        }
     }
 }
 </script>

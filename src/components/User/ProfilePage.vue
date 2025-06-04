@@ -40,7 +40,9 @@
 <script>
 import Header from '../Header.vue';
 import Footer from '../Footer.vue';
-import User from '../../Service/User';
+import { checkLogin } from '@/Service/auth';
+// import User from '../../Service/User';
+import User from '../../Service/IndexDB/UserIDB';
 
 export default {
     components: {
@@ -59,6 +61,7 @@ export default {
         }
     },
     mounted() {
+        checkLogin(this);
         User.getUser().then((user) => {
             this.user = user;
         }).catch((error) => {

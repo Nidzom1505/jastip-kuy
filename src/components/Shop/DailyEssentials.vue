@@ -3,7 +3,7 @@
 
     <div class="flex h-[calc(100vh-64px)]">
         <!-- Sidebar Kiri: Filter -->
-        <aside class="w-60 bg-gray-100 border-r border-gray-200 flex-shrink-0 p-6">
+        <aside class="w-40 bg-gray-100 border-r border-gray-200 flex-shrink-0 p-6">
             <h2 class="font-bold mb-4">Filter</h2>
             <ul class="space-y-2">
                 <li>
@@ -40,6 +40,15 @@
                     </button>
                 </div>
             </div>
+            <!-- Pagination Angka -->
+            <div v-if="totalPages > 1" class="flex justify-center mt-6 space-x-2">
+                <button v-for="page in totalPages" :key="page" @click="currentPage = page" :class="[
+                    'px-3 py-1 rounded font-semibold',
+                    currentPage === page ? 'bg-green text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                ]">
+                    {{ page }}
+                </button>
+            </div>
         </main>
 
         <!-- Sidebar Kanan: Sorting & Keranjang -->
@@ -60,7 +69,13 @@
                 <ul class="space-y-2">
                     <li v-for="item in keranjang" :key="item.id" class="flex justify-between items-center">
                         <span>{{ item.nama }}</span>
-                        <span class="text-sm text-gray-500">Rp {{ item.harga.toLocaleString() }}</span>
+                        <div class="flex items-center">
+                            <button @click="ubahQty(item, (item.quantity || 1) - 1)" class="px-2">-</button>
+                            <span class="mx-2">{{ item.quantity || 1 }}</span>
+                            <button @click="ubahQty(item, (item.quantity || 1) + 1)" class="px-2">+</button>
+                        </div>
+                        <span class="text-sm text-gray-500">Rp {{ (item.harga * (item.quantity || 1)).toLocaleString()
+                            }}</span>
                     </li>
                 </ul>
                 <div v-if="keranjang.length" class="mt-2 font-bold text-indigo-700">
@@ -76,7 +91,11 @@
 <script>
 import Header from '../Header.vue';
 import Footer from '../Footer.vue';
-import ProdukService from '../../Service/Produk';
+import { filterMakananMinuman } from '@/Service/ProdukFilter';
+import { sortProduk } from '@/Service/ProdukSorting';
+import { checkLogin } from '@/Service/auth';
+// import ProdukService from '../../Service/Produk';
+import ProdukService from '@/Service/IndexDB/ProdukIDB';
 
 export default {
     components: {
@@ -88,27 +107,34 @@ export default {
             produk: [],
             filterKategori: "",
             sortBy: '',
-            keranjang: []
+            keranjang: [],
+            pageSize: 9,
+            currentPage: 1
         }
     },
     computed: {
         produkTersaring() {
-            let hasil = this.produk.filter(
-                p => p.kategori === 'makanan' || p.kategori === 'minuman'
-            );
-            if (this.filterKategori) {
-                hasil = hasil.filter(p => p.kategori === this.filterKategori);
-            }
-
-            if (this.sortBy === 'termurah') {
-                hasil = [...hasil].sort((a, b) => a.harga - b.harga);
-            } else if (this.sortBy === 'termahal') {
-                hasil = [...hasil].sort((a, b) => b.harga - a.harga);
-            }
-            return hasil;
+            let hasil = filterMakananMinuman(this.produk, this.filterKategori);
+            hasil = sortProduk(hasil, this.sortBy);
+            const start = (this.currentPage - 1) * this.pageSize;
+            return hasil.slice(start, start + this.pageSize);
+        },
+        produkCount() {
+            return filterMakananMinuman(this.produk, this.filterKategori).length;
+        },
+        totalPages() {
+            return Math.ceil(this.produkCount / this.pageSize);
         },
         totalKeranjang() {
-            return this.keranjang.reduce((sum, item) => sum + item.harga, 0);
+            return this.keranjang.reduce((sum, item) => sum + (item.harga * (item.quantity || 1)), 0);
+        }
+    },
+    watch: {
+        filterKategori() {
+            this.currentPage = 1;
+        },
+        sortBy() {
+            this.currentPage = 1;
         }
     },
     methods: {
@@ -117,13 +143,22 @@ export default {
         },
         async masukkanKeranjang(produk) {
             await ProdukService.addToKeranjang(produk);
-            await this.fetchKeranjang(); // refresh sidebar keranjang dari server
+            await this.fetchKeranjang();
         },
         async fetchKeranjang() {
             this.keranjang = await ProdukService.getKeranjang();
+        },
+        async ubahQty(item, qty) {
+            if (qty < 1) {
+                await ProdukService.removeFromKeranjang(item.id);
+            } else {
+                await ProdukService.updateQtyKeranjang(item.id, qty);
+            }
+            await this.fetchKeranjang();
         }
     },
     mounted() {
+        checkLogin(this);
         this.fetchProduk();
         this.fetchKeranjang();
     }

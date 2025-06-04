@@ -3,25 +3,20 @@
 
     <div class="flex h-[calc(100vh-64px)]">
         <!-- Sidebar Kiri: Filter -->
-        <aside class="w-60 bg-gray-100 border-r border-gray-200 flex-shrink-0 p-6">
-            <!-- <h2 class="font-bold mb-4">Filter</h2> -->
-            <!-- <ul class="space-y-2">
+        <!-- <aside class="w-60 bg-gray-100 border-r border-gray-200 flex-shrink-0 p-6">
+            <h2 class="font-bold mb-4">Filter</h2>
+            <ul class="space-y-2">
                 <li>
-                    <button @click="filterKategori = 'makanan'"
-                        :class="filterKategori === 'makanan' ? 'bg-gray-300' : ''"
-                        class="w-full text-left py-2 px-3 rounded hover:bg-gray-200 font-medium">Makanan</button>
-                </li>
-                <li>
-                    <button @click="filterKategori = 'minuman'"
-                        :class="filterKategori === 'minuman' ? 'bg-gray-300' : ''"
-                        class="w-full text-left py-2 px-3 rounded hover:bg-gray-200 font-medium">Minuman</button>
+                    <button @click="filterKategori = 'cemilan'"
+                        :class="filterKategori === 'cemilan' ? 'bg-gray-300' : ''"
+                        class="w-full text-left py-2 px-3 rounded hover:bg-gray-200 font-medium">Cemilan</button>
                 </li>
                 <li>
                     <button @click="filterKategori = ''"
                         class="w-full text-left py-2 px-3 rounded hover:bg-gray-200 font-medium">Semua</button>
                 </li>
-            </ul> -->
-        </aside>
+            </ul>
+        </aside> -->
 
         <!-- Konten Tengah (scrollable) -->
         <main class="flex-1 overflow-y-auto bg-white p-8">
@@ -39,6 +34,15 @@
                         Masukkan Keranjang
                     </button>
                 </div>
+            </div>
+            <!-- Pagination Angka -->
+            <div v-if="totalPages > 1" class="flex justify-center mt-6 space-x-2">
+                <button v-for="page in totalPages" :key="page" @click="currentPage = page" :class="[
+                    'px-3 py-1 rounded font-semibold',
+                    currentPage === page ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                ]">
+                    {{ page }}
+                </button>
             </div>
         </main>
 
@@ -60,7 +64,13 @@
                 <ul class="space-y-2">
                     <li v-for="item in keranjang" :key="item.id" class="flex justify-between items-center">
                         <span>{{ item.nama }}</span>
-                        <span class="text-sm text-gray-500">Rp {{ item.harga.toLocaleString() }}</span>
+                        <div class="flex items-center">
+                            <button @click="ubahQty(item, (item.quantity || 1) - 1)" class="px-2">-</button>
+                            <span class="mx-2">{{ item.quantity || 1 }}</span>
+                            <button @click="ubahQty(item, (item.quantity || 1) + 1)" class="px-2">+</button>
+                        </div>
+                        <span class="text-sm text-gray-500">Rp {{ (item.harga * (item.quantity || 1)).toLocaleString()
+                        }}</span>
                     </li>
                 </ul>
                 <div v-if="keranjang.length" class="mt-2 font-bold text-indigo-700">
@@ -76,34 +86,43 @@
 <script>
 import Header from '../Header.vue';
 import Footer from '../Footer.vue';
-import ProdukService from '../../Service/Produk';
+import { filterCemilan } from '@/Service/ProdukFilter';
+import { sortProduk } from '@/Service/ProdukSorting';
+import { checkLogin } from '@/Service/auth';
+import ProdukService from '@/Service/IndexDB/ProdukIDB';
 
 export default {
     components: { Header, Footer },
     data() {
         return {
             produk: [],
-            filterKategori: 'cemilan', // 'ngemil', 'makanan', 'minuman', atau ''
+            filterKategori: 'cemilan',
             sortBy: '',
-            keranjang: []
+            keranjang: [],
+            pageSize: 9,
+            currentPage: 1
         }
     },
     computed: {
         produkTersaring() {
-            let hasil = this.produk;
-            // Filter kategori sesuai kebutuhan halaman
-            if (this.filterKategori) {
-                hasil = hasil.filter(p => p.kategori === this.filterKategori);
-            }
-            if (this.sortBy === 'termurah') {
-                hasil = [...hasil].sort((a, b) => a.harga - b.harga);
-            } else if (this.sortBy === 'termahal') {
-                hasil = [...hasil].sort((a, b) => b.harga - a.harga);
-            }
-            return hasil;
+            let hasil = filterCemilan(this.produk);
+            hasil = sortProduk(hasil, this.sortBy);
+            const start = (this.currentPage - 1) * this.pageSize;
+            return hasil.slice(start, start + this.pageSize);
+        },
+        produkCount() {
+            return filterCemilan(this.produk).length;
+        },
+        totalPages() {
+            return Math.ceil(this.produkCount / this.pageSize);
         },
         totalKeranjang() {
-            return this.keranjang.reduce((sum, item) => sum + item.harga, 0);
+            return this.keranjang.reduce((sum, item) => sum + (item.harga * (item.quantity || 1)), 0);
+        }
+    },
+    watch: {
+        sortBy() {
+            this.currentPage = 1;
         }
     },
     methods: {
@@ -116,9 +135,18 @@ export default {
         },
         async fetchKeranjang() {
             this.keranjang = await ProdukService.getKeranjang();
+        },
+        async ubahQty(item, qty) {
+            if (qty < 1) {
+                await ProdukService.removeFromKeranjang(item.id);
+            } else {
+                await ProdukService.updateQtyKeranjang(item.id, qty);
+            }
+            await this.fetchKeranjang();
         }
     },
     mounted() {
+        checkLogin(this);
         this.fetchProduk();
         this.fetchKeranjang();
     }

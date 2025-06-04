@@ -40,7 +40,9 @@
 </template>
 
 <script>
-import User from '../../../Service/User';
+import { checkLogin } from '@/Service/auth';
+// import User from '../../../Service/User';
+import User from '@/Service/IndexDB/UserIDB';
 
 export default {
     data() {
@@ -48,6 +50,9 @@ export default {
             newPassword: '',
             conPassword: ''
         }
+    },
+    mounted() {
+        checkLogin(this);
     },
     methods: {
         async simpanPassword() {

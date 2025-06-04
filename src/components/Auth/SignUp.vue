@@ -70,15 +70,15 @@
             <p class="mt-10 text-center text-sm/6 text-gray-500">
                 Sudah punya akun?
                 {{ ' ' }}
-                <router-link class="font-semibold text-indigo-600 hover:text-indigo-500" to="/">Login</router-link>
+                <router-link class="font-semibold text-indigo-600 hover:text-indigo-500" to="/login">Login</router-link>
             </p>
         </div>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
-import User from '../../Service/User';
+// import User from '../../Service/User';
+import User from '../../Service/IndexDB/UserIDB';
 
 export default {
     name: 'SignUp',
