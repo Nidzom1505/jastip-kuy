@@ -1,9 +1,7 @@
 <template>
     <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img class="mx-auto h-10 w-auto bg-gray-500"
-                src="../../assets/logo.png"
-                alt="Your Company" />
+            <img class="mx-auto h-10 w-auto bg-gray-500" src="../../assets/logo.png" alt="Your Company" />
             <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Log in to your account</h2>
         </div>
 
@@ -44,8 +42,9 @@
 </template>
 
 <script>
-// import User from '../../Service/User';
-import User from '../../Service/IndexDB/UserIDB';
+import User from '@/Service/User';
+import Auth from '@/Service/auth';
+// import User from '../../Service/IndexDB/UserIDB';
 
 export default {
     name: 'LoginPage',
@@ -57,21 +56,12 @@ export default {
         }
     },
     methods: {
-        async login() {
-            const success = await User.login(this.user, this.password);
-
-            if (success === true) {
-                this.$router.push("/");
-            } else {
-                alert("Login gagal. Periksa kembali username dan password Anda.");
-            }
+        login() {
+            User.login(this.user, this.password, this.$router);
         }
     },
     mounted() {
-        const user = localStorage.getItem("user-info");
-        if (user) {
-            this.$router.push("/");
-        }
+        Auth.checkToken(this);
     }
 }
 </script>

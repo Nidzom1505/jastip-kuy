@@ -77,8 +77,9 @@
 </template>
 
 <script>
-// import User from '../../Service/User';
-import User from '../../Service/IndexDB/UserIDB';
+import User from '../../Service/User';
+import Auth from '@/Service/auth';
+// import User from '../../Service/IndexDB/UserIDB';
 
 export default {
     name: 'SignUp',
@@ -93,15 +94,13 @@ export default {
             conPassword: ''
         }
     },
-
     methods: {
         async create() {
-            const success = await User.register(this.name, this.user, this.email, this.telp, this.password, this.conPassword);
-
-            if (success) {
-                this.$router.push("/login");
-            }
+            User.register(this.name, this.user, this.email, this.telp, this.password, this.conPassword, this.$router);
         }
+    },
+    mounted() {
+        Auth.checkToken(this);
     }
 }
 

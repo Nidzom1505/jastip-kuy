@@ -40,9 +40,9 @@
 <script>
 import Header from '../Header.vue';
 import Footer from '../Footer.vue';
-import { checkLogin } from '@/Service/auth';
-// import User from '../../Service/User';
-import User from '../../Service/IndexDB/UserIDB';
+import Auth from '@/Service/auth';
+import User from '@/Service/User';
+// import User from '@/Service/IndexDB/UserIDB';
 
 export default {
     components: {
@@ -56,12 +56,11 @@ export default {
     },
     methods: {
         async out() {
-            User.logout();
-            this.$router.push("/login");
+            User.logout(this.$router);
         }
     },
     mounted() {
-        checkLogin(this);
+        Auth.checkLogin(this);
         User.getUser().then((user) => {
             this.user = user;
         }).catch((error) => {

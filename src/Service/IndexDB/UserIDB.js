@@ -8,7 +8,7 @@ class UserIDB {
     return UserIDB.instance;
   }
 
-  async register(name, username, email, telp, password, conPassword) {
+  async register(name, username, email, telp, password, conPassword, router) {
     if (
       [name, username, email, telp, password, conPassword].some(
         (arg) => !arg || arg.trim() === ""
@@ -47,6 +47,7 @@ class UserIDB {
     const id = await db.add("user", { name, username, email, telp, password });
     if (id) {
       alert("Berhasil mendaftar!");
+      if (router) router.push("/login");
       return true;
     } else {
       alert("Gagal mendaftar!");
@@ -54,7 +55,7 @@ class UserIDB {
     }
   }
 
-  async login(user, password) {
+  async login(user, password, router) {
     if ([user, password].some((arg) => !arg || arg.trim() === "")) {
       alert("Isi semua data");
       return false;
@@ -67,16 +68,18 @@ class UserIDB {
     );
     if (userData) {
       localStorage.setItem("user-info", JSON.stringify(userData));
+      if (router) router.push("/");
       return true;
     } else {
-      alert("Username/email atau password salah!");
+      alert("username dan password Anda salah!");
       return false;
     }
   }
 
-  async logout() {
+  async logout(router) {
     localStorage.removeItem("user-info");
-    console.log("Logout berhasil!");
+    if (router) router.push("/login");
+    return true;
   }
 
   async getUser() {
@@ -98,31 +101,51 @@ class UserIDB {
     return null;
   }
 
-  async updateProfile(data) {
-    const user = localStorage.getItem("user-info");
-    if (!user) {
+  async getAllUsers() {
+    const db = await dbPromise;
+    return db.getAll("user");
+  }
+
+  async updateProfile(user, router) {
+    if (!user.nama || !user.email) {
+      alert("Nama dan email wajib diisi!");
+      return false;
+    }
+
+    const allUsers = await this.getAllUsers();
+    const userInfo = JSON.parse(localStorage.getItem("user-info"));
+    const userId = userInfo?.id;
+
+    const emailUsed = allUsers.find(
+      (u) => u.email === user.email && u.id !== userId
+    );
+    if (emailUsed) {
+      alert("Email sudah digunakan oleh akun lain!");
+      return false;
+    }
+
+    const db = await dbPromise;
+    const userData = await db.get("user", userId);
+    if (!userData) {
       alert("User tidak ditemukan!");
       return false;
     }
-    const userObj = JSON.parse(user);
-    try {
-      const db = await dbPromise;
-      const userData = await db.get("user", userObj.id);
-      if (!userData) {
-        alert("User tidak ditemukan!");
-        return false;
-      }
-      const updated = { ...userData, ...data };
-      await db.put("user", updated);
-      localStorage.setItem("user-info", JSON.stringify(updated));
-      return true;
-    } catch (err) {
-      alert("Terjadi kesalahan saat update profil!");
-      return false;
-    }
+
+    const updated = {
+      ...userData,
+      nama: user.nama,
+      email: user.email,
+      username: user.username,
+      telp: user.telp,
+    };
+    await db.put("user", updated);
+    localStorage.setItem("user-info", JSON.stringify(updated));
+    alert("Profil berhasil diupdate!");
+    if (router) router.push("/profile");
+    return true;
   }
 
-  async changePassword(newPassword, confirmPassword) {
+  async changePassword(newPassword, confirmPassword, router) {
     const user = localStorage.getItem("user-info");
     if (!user) {
       alert("User tidak ditemukan!");
@@ -167,6 +190,7 @@ class UserIDB {
       const updated = { ...userData, password: newPassword };
       await db.put("user", updated);
       localStorage.setItem("user-info", JSON.stringify(updated));
+      if (router) router.push("/profile");
       return true;
     } catch (err) {
       alert("Gagal update password!");

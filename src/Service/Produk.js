@@ -28,15 +28,29 @@ class Produk {
         ...produkTanpaId,
         produkId: id,
         userId,
+        quantity: 1,
       });
       return res.data;
+    } else {
+      const existing = cek.data[0];
+      const res = await axios.patch(
+        `http://localhost:3000/keranjang/${existing.id}`,
+        { quantity: (existing.quantity || 1) + 1 }
+      );
+      return res.data;
     }
-    return null;
   }
 
   async removeFromKeranjang(id) {
     await axios.delete(`http://localhost:3000/keranjang/${id}`);
     return true;
+  }
+
+  async updateQtyKeranjang(id, quantity) {
+    const res = await axios.patch(`http://localhost:3000/keranjang/${id}`, {
+      quantity,
+    });
+    return res.data;
   }
 }
 

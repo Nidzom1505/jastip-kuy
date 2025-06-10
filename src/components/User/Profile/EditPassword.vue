@@ -40,9 +40,9 @@
 </template>
 
 <script>
-import { checkLogin } from '@/Service/auth';
-// import User from '../../../Service/User';
-import User from '@/Service/IndexDB/UserIDB';
+import Auth from '@/Service/auth';
+import User from '@/Service/User';
+// import User from '@/Service/IndexDB/UserIDB';
 
 export default {
     data() {
@@ -52,15 +52,11 @@ export default {
         }
     },
     mounted() {
-        checkLogin(this);
+        Auth.checkLogin(this);
     },
     methods: {
         async simpanPassword() {
-            const success = await User.changePassword(this.newPassword, this.conPassword);
-            if (success) {
-                alert("Password berhasil diubah!");
-                this.$router.push("/profile");
-            }
+            User.changePassword(this.newPassword, this.conPassword, this.$router);
         }
     }
 }

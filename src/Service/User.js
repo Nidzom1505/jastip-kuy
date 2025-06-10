@@ -8,32 +8,39 @@ class User {
     return User.instance;
   }
 
-  async register(name, user, email, telp, password, conPassword) {
-    if (Object.values(arguments).some((arg) => arg.trim() === "")) {
+  async register(name, user, email, telp, password, conPassword, router) {
+    if (
+      [name, user, email, telp, password, conPassword].some(
+        (arg) => typeof arg !== "string" || arg.trim() === ""
+      )
+    ) {
       return alert("Isi semua data");
     }
 
     const cek = await axios.get(`http://localhost:3000/user?email=${email}`);
 
     if (cek.status === 200 && cek.data.length > 0) {
-      console.log("Ada");
-      return alert("Email sudah terdaftar!");
+      alert("Email sudah terdaftar!");
+      return false;
     }
 
     if (password.length <= 8) {
-      return alert("Password minimal 8 karakter");
+      alert("Password minimal 8 karakter");
+      return false;
     }
 
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
     if (!passwordRegex.test(password)) {
-      return alert(
+      alert(
         "Password harus mengandung minimal 1 huruf besar, 1 huruf kecil, 1 angka, dan 1 karakter khusus"
       );
+      return false;
     }
 
     if (password !== conPassword) {
-      return alert("Konfirmasi password tidak cocok");
+      alert("Konfirmasi password tidak cocok");
+      return false;
     }
 
     const result = await axios.post("http://localhost:3000/user", {
@@ -45,8 +52,8 @@ class User {
     });
 
     if (result.status === 201) {
-      console.log("Berhasil!");
       alert("Berhasil mendaftar!");
+      if (router) router.push("/login");
       return true;
     } else {
       console.log("Gagal!");
@@ -54,9 +61,14 @@ class User {
     }
   }
 
-  async login(user, password) {
-    if (Object.values(arguments).some((arg) => arg.trim() === "")) {
-      return alert("Isi semua data");
+  async login(user, password, router) {
+    if (
+      [user, password].some(
+        (arg) => typeof arg !== "string" || arg.trim() === ""
+      )
+    ) {
+      alert("Isi semua data");
+      return false;
     }
 
     const userParam = encodeURIComponent(user);
@@ -74,18 +86,19 @@ class User {
 
     if (result.status === 200 && result.data.length > 0) {
       const userData = result.data[0];
-      console.log("Berhasil!");
       localStorage.setItem("user-info", JSON.stringify(userData));
+      if (router) router.push("/");
       return true;
     } else {
-      console.log("Gagal!");
+      alert("username dan password Anda salah!");
       return false;
     }
   }
 
-  async logout() {
+  async logout(router) {
     localStorage.removeItem("user-info");
-    console.log("Logout berhasil!");
+    if (router) router.push("/login");
+    return true;
   }
 
   async getUser() {
@@ -113,32 +126,59 @@ class User {
     }
   }
 
-  async updateProfile(data) {
-    const user = localStorage.getItem("user-info");
-    if (!user) {
-      alert("User tidak ditemukan!");
-      return false;
-    }
-    const userObj = JSON.parse(user);
+  async getAllUsers() {
     try {
-      const result = await axios.put(
-        `http://localhost:3000/user/${userObj.id}`,
-        data
-      );
+      const result = await axios.get("http://localhost:3000/user");
       if (result.status === 200) {
-        localStorage.setItem("user-info", JSON.stringify(result.data));
-        return true;
+        return result.data;
       } else {
-        alert("Gagal update profil!");
-        return false;
+        alert("Gagal mengambil data user!");
+        return [];
       }
     } catch (err) {
-      alert("Terjadi kesalahan saat update profil!");
+      console.error("Error saat mengambil semua user:", err);
+      alert("Terjadi kesalahan saat mengambil data user!");
+      return [];
+    }
+  }
+
+  async updateProfile(user, router) {
+    if (!user.nama || !user.email) {
+      alert("Nama dan email wajib diisi!");
+      return false;
+    }
+
+    const allUsers = await this.getAllUsers();
+    const userInfo = JSON.parse(localStorage.getItem("user-info"));
+    const userId = userInfo?.id;
+
+    const emailUsed = allUsers.find(
+      (u) => u.email === user.email && u.id !== userId
+    );
+    if (emailUsed) {
+      alert("Email sudah digunakan oleh akun lain!");
+      return false;
+    }
+
+    const result = await axios.put(`http://localhost:3000/user/${userId}`, {
+      name: user.nama,
+      email: user.email,
+      username: user.username,
+      telp: user.telp,
+      password: userInfo.password,
+    });
+    if (result.status === 200) {
+      localStorage.setItem("user-info", JSON.stringify(result.data));
+      alert("Profil berhasil diupdate!");
+      if (router) router.push("/profile");
+      return true;
+    } else {
+      alert("Gagal update profil!");
       return false;
     }
   }
 
-  async changePassword(newPassword, confirmPassword) {
+  async changePassword(newPassword, confirmPassword, router) {
     const user = localStorage.getItem("user-info");
     if (!user) {
       alert("User tidak ditemukan!");
@@ -146,7 +186,11 @@ class User {
     }
     const userObj = JSON.parse(user);
 
-    if (Object.values(arguments).some((arg) => arg.trim() === "")) {
+    if (
+      [newPassword, confirmPassword].some(
+        (arg) => typeof arg !== "string" || arg.trim() === ""
+      )
+    ) {
       alert("Semua wajib diisi!");
       return false;
     }
@@ -186,17 +230,18 @@ class User {
         );
         if (updateResult.status === 200) {
           localStorage.setItem("user-info", JSON.stringify(updateResult.data));
+          if (router) router.push("/profile");
           return true;
         } else {
           alert("Gagal update password!");
           return false;
         }
       } else {
-        alert("User tidak ditemukan di database!");
+        alert("User tidak ditemukan!");
         return false;
       }
     } catch (err) {
-      alert("Terjadi kesalahan saat update password!");
+      alert("Terjadi kesalahan!");
       return false;
     }
   }

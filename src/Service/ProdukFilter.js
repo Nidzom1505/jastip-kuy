@@ -5,15 +5,18 @@
  */
 
 export function filterMakananMinuman(produkList, filterKategori) {
-    let hasil = produkList.filter(
-        p => p.kategori === 'makanan' || p.kategori === 'minuman'
-    );
-    if (filterKategori) {
-        hasil = hasil.filter(p => p.kategori === filterKategori);
-    }
-    return hasil;
+  let hasil = produkList.filter(
+    (p) =>
+      p.kategori === "makanan" ||
+      p.kategori === "minuman" ||
+      p.kategori === "paket"
+  );
+  if (filterKategori) {
+    hasil = hasil.filter((p) => p.kategori === filterKategori);
+  }
+  return hasil;
 }
 
 export function filterCemilan(produkList) {
-    return produkList.filter(p => p.kategori === 'cemilan');
+  return produkList.filter((p) => p.kategori === "cemilan");
 }

@@ -53,9 +53,9 @@
 </template>
 
 <script>
-// import User from '../../../Service/User';
-import { checkLogin } from '@/Service/auth';
-import User from '@/Service/IndexDB/UserIDB';
+import User from '@/Service/User';
+import Auth from '@/Service/auth';
+// import User from '@/Service/IndexDB/UserIDB';
 
 export default {
     data() {
@@ -69,7 +69,7 @@ export default {
         }
     },
     mounted() {
-        checkLogin(this);
+        Auth.checkLogin(this);
         User.getUser().then((user) => {
             this.user = user;
         }).catch((error) => {
@@ -78,21 +78,12 @@ export default {
     },
     methods: {
         async saveProfile() {
-            if (!this.user.nama || !this.user.email) {
-                alert("Nama dan email wajib diisi!");
-                return;
-            }
-
-            const success = await User.updateProfile({
-                name: this.user.nama,
+            User.updateProfile({
+                nama: this.user.nama,
                 email: this.user.email,
                 username: this.user.username,
-                telp: this.user.telp
-            });
-            if (success) {
-                alert("Profil berhasil diupdate!");
-                this.$router.push("/profile");
-            }
+                telp: this.user.telp,
+            }, this.$router);
         }
     }
 }

@@ -21,19 +21,18 @@ class ProdukIDB {
     const userId = JSON.parse(userInfo).id;
     const db = await dbPromise;
     const all = await db.getAll("keranjang");
-    // Cari produk di keranjang user
+
     const existing = all.find(
       (item) => item.produkId === produk.id && item.userId === userId
     );
     if (existing) {
-      // Tambah quantity
+
       await db.put("keranjang", {
         ...existing,
         quantity: (existing.quantity || 1) + 1,
       });
       return true;
     } else {
-      // Tambah produk baru dengan quantity 1
       const { id, ...produkTanpaId } = produk;
       return db.add("keranjang", {
         ...produkTanpaId,
