@@ -2,6 +2,8 @@ import axios from "axios";
 
 class User {
   constructor() {
+    this.url = "https://elephant-storm-pairs-ensures.trycloudflare.com/";
+    this.token= localStorage.getItem("token");
     if (!User.instance) {
       User.instance = this;
     }
@@ -17,9 +19,13 @@ class User {
       return alert("Isi semua data");
     }
 
-    const cek = await axios.get(`http://localhost:3000/user?email=${email}`);
+    const cek = await axios.get(
+      `${this.url}api/cek-email?email=${email}`
+    );
 
-    if (cek.status === 200 && cek.data.length > 0) {
+    const hasil = cek.data.available;
+
+    if (cek.status === 200 && hasil === false) {
       alert("Email sudah terdaftar!");
       return false;
     }
@@ -43,7 +49,7 @@ class User {
       return false;
     }
 
-    const result = await axios.post("http://localhost:3000/user", {
+    const result = await axios.post(`${this.url}api/register`, {
       name: name,
       username: user,
       email: email,
@@ -71,52 +77,84 @@ class User {
       return false;
     }
 
-    const userParam = encodeURIComponent(user);
-    const passParam = encodeURIComponent(password);
+    // const userParam = encodeURIComponent(user);
+    // const passParam = encodeURIComponent(password);
 
-    let result = await axios.get(
-      `http://localhost:3000/user?username=${userParam}&password=${passParam}`
-    );
+    // let result = await axios.get(
+    //   `http://localhost:3000/user?username=${userParam}&password=${passParam}`
+    // );
 
-    if (!(result.status === 200 && result.data.length > 0)) {
-      result = await axios.get(
-        `http://localhost:3000/user?email=${userParam}&password=${passParam}`
-      );
-    }
+    // if (!(result.status === 200 && result.data.length > 0)) {
+    // }
+    try {
+      const result = await axios.post(`${this.url}api/login`, {
+        email: user,
+        password: password,
+      });
 
-    if (result.status === 200 && result.data.length > 0) {
-      const userData = result.data[0];
-      localStorage.setItem("user-info", JSON.stringify(userData));
-      if (router) router.push("/");
-      return true;
-    } else {
-      alert("username dan password Anda salah!");
+      if (result.status === 200) {
+        const create = result.data.data.token;
+        localStorage.setItem("token", create);
+
+        if (router) router.push("/");
+        return true;
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        alert("Email atau password Anda salah!");
+      } else {
+        alert("Terjadi kesalahan saat login.");
+      }
       return false;
     }
   }
 
   async logout(router) {
-    localStorage.removeItem("user-info");
-    if (router) router.push("/login");
-    return true;
+    if (!this.token) {
+      alert("Token tidak ditemukan");
+      if (router) router.push("/login");
+      return false;
+    }
+
+    try {
+      await axios.post(
+        `${this.url}api/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        }
+      );
+
+      localStorage.removeItem("token");
+      alert("Berhasil logout");
+      if (router) router.push("/login");
+      return true;
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("Gagal logout dari server");
+      return false;
+    }
   }
 
   async getUser() {
-    const user = localStorage.getItem("user-info");
-    if (user) {
-      const userObj = JSON.parse(user);
-      const result = await axios.get(
-        `http://localhost:3000/user?email=${userObj.email}`
-      );
+    if (this.token) {
+      const result = await axios.get(`${this.url}api/user`, {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
+      });
 
-      if (result.status === 200 && result.data.length > 0) {
-        const userData = result.data[0];
+      if (result.status === 200 && result.data) {
+        const userData = result.data;
         console.log("Berhasil!");
         return {
           nama: userData.name,
           email: userData.email,
           username: userData.username,
           telp: userData.telp,
+          id: userData.id,
         };
       } else {
         console.log("Gagal!");
@@ -126,49 +164,40 @@ class User {
     }
   }
 
-  async getAllUsers() {
-    try {
-      const result = await axios.get("http://localhost:3000/user");
-      if (result.status === 200) {
-        return result.data;
-      } else {
-        alert("Gagal mengambil data user!");
-        return [];
-      }
-    } catch (err) {
-      console.error("Error saat mengambil semua user:", err);
-      alert("Terjadi kesalahan saat mengambil data user!");
-      return [];
-    }
-  }
-
   async updateProfile(user, router) {
     if (!user.nama || !user.email) {
       alert("Nama dan email wajib diisi!");
       return false;
     }
 
-    const allUsers = await this.getAllUsers();
-    const userInfo = JSON.parse(localStorage.getItem("user-info"));
-    const userId = userInfo?.id;
+    const userData = await this.getUser();
 
-    const emailUsed = allUsers.find(
-      (u) => u.email === user.email && u.id !== userId
+    const cek = await axios.get(
+      `${this.url}api/cek-email?email=${user.email}&exclude=${userData.id}`
     );
-    if (emailUsed) {
-      alert("Email sudah digunakan oleh akun lain!");
+
+    const hasil = cek.data.available;
+    if (cek.status === 200 && hasil === false) {
+      alert("Email sudah terdaftar!");
       return false;
     }
 
-    const result = await axios.put(`http://localhost:3000/user/${userId}`, {
-      name: user.nama,
-      email: user.email,
-      username: user.username,
-      telp: user.telp,
-      password: userInfo.password,
-    });
+    const result = await axios.put(
+      `${this.url}api/user/update`,
+      {
+        name: user.nama,
+        email: user.email,
+        username: user.username,
+        telp: user.telp,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          Accept: "application/json",
+        },
+      }
+    );
     if (result.status === 200) {
-      localStorage.setItem("user-info", JSON.stringify(result.data));
       alert("Profil berhasil diupdate!");
       if (router) router.push("/profile");
       return true;
@@ -179,12 +208,10 @@ class User {
   }
 
   async changePassword(newPassword, confirmPassword, router) {
-    const user = localStorage.getItem("user-info");
-    if (!user) {
+    if (!this.token) {
       alert("User tidak ditemukan!");
       return false;
     }
-    const userObj = JSON.parse(user);
 
     if (
       [newPassword, confirmPassword].some(
@@ -214,34 +241,28 @@ class User {
     }
 
     try {
-      const result = await axios.get(
-        `http://localhost:3000/user?username=${userObj.username}`
+      const response = await axios.put(
+        `${this.url}api/user/update-password`,
+        {
+          passwordBaru: newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        }
       );
-      if (result.status === 200 && result.data.length > 0) {
-        const userFromReq = result.data[0];
-        if (userFromReq.password === newPassword) {
-          alert("Password baru tidak boleh sama dengan password lama!");
-          return false;
-        }
 
-        const updateResult = await axios.put(
-          `http://localhost:3000/user/${userFromReq.id}`,
-          { ...userFromReq, password: newPassword }
-        );
-        if (updateResult.status === 200) {
-          localStorage.setItem("user-info", JSON.stringify(updateResult.data));
-          if (router) router.push("/profile");
-          return true;
-        } else {
-          alert("Gagal update password!");
-          return false;
-        }
+      if (response.data.success) {
+        alert("Password berhasil diganti!");
+        if (router) router.push("/profile");
+        return true;
       } else {
-        alert("User tidak ditemukan!");
+        alert(response.data.message || "Gagal mengganti password");
         return false;
       }
-    } catch (err) {
-      alert("Terjadi kesalahan!");
+    } catch (error) {
+      alert(error.response?.data?.message || "Terjadi kesalahan");
       return false;
     }
   }

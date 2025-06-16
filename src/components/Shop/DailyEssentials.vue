@@ -2,7 +2,6 @@
     <Header />
 
     <div class="flex h-[calc(100vh-64px)]">
-        <!-- Sidebar Kiri: Filter -->
         <aside class="w-40 bg-gray-100 border-r border-gray-200 flex-shrink-0 p-6">
             <h2 class="font-bold mb-4">Filter</h2>
             <ul class="space-y-2">
@@ -70,14 +69,15 @@
                 <h2 class="font-bold mb-2">Keranjang</h2>
                 <ul class="space-y-2">
                     <li v-for="item in keranjang" :key="item.id" class="flex justify-between items-center">
-                        <span>{{ item.nama }}</span>
+                        <span>{{ item.product.name }}</span>
                         <div class="flex items-center">
                             <button @click="ubahQty(item, (item.quantity || 1) - 1)" class="px-2">-</button>
                             <span class="mx-2">{{ item.quantity || 1 }}</span>
                             <button @click="ubahQty(item, (item.quantity || 1) + 1)" class="px-2">+</button>
                         </div>
-                        <span class="text-sm text-gray-500">Rp {{ (item.harga * (item.quantity || 1)).toLocaleString()
-                            }}</span>
+                        <span class="text-sm text-gray-500">
+                            Rp {{ (item.product.price * (item.quantity || 1)).toLocaleString() }}
+                        </span>
                     </li>
                 </ul>
                 <div v-if="keranjang.length" class="mt-2 font-bold text-indigo-700">
@@ -97,6 +97,7 @@ import { filterMakananMinuman } from '@/Service/ProdukFilter';
 import { sortProduk } from '@/Service/ProdukSorting';
 import Auth from '@/Service/auth';
 import ProdukService from '@/Service/Produk';
+import Keranjang from '@/Service/Keranjang';
 // import ProdukService from '@/Service/IndexDB/ProdukIDB';
 
 export default {
@@ -144,7 +145,7 @@ export default {
             return pages;
         },
         totalKeranjang() {
-            return this.keranjang.reduce((sum, item) => sum + (item.harga * (item.quantity || 1)), 0);
+            return this.keranjang.reduce((sum, item) => sum + (item.product.price * (item.quantity || 1)), 0);
         }
     },
     watch: {
@@ -160,18 +161,14 @@ export default {
             this.produk = await ProdukService.getAll();
         },
         async masukkanKeranjang(produk) {
-            await ProdukService.addToKeranjang(produk);
+            await Keranjang.addToKeranjang(produk);
             await this.fetchKeranjang();
         },
         async fetchKeranjang() {
-            this.keranjang = await ProdukService.getKeranjang();
+            this.keranjang = await Keranjang.getKeranjang();
         },
         async ubahQty(item, qty) {
-            if (qty < 1) {
-                await ProdukService.removeFromKeranjang(item.id);
-            } else {
-                await ProdukService.updateQtyKeranjang(item.id, qty);
-            }
+            await Keranjang.updateQtyKeranjang(item.id, qty);
             await this.fetchKeranjang();
         }
     },

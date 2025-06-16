@@ -8,14 +8,14 @@
                     <li v-for="item in keranjang" :key="item.id"
                         class="grid grid-cols-[40px_1fr_110px_120px_40px] items-center py-2 bg-grey rounded-xl mb-2 gap-2">
                         <input type="checkbox" v-model="checkedItems" :value="item.id" class="ml-6 mr-2 w-4 h-4" />
-                        <span class="truncate">{{ item.nama }}</span>
+                        <span class="truncate">{{ item.product.name }}</span>
                         <div class="flex items-center justify-center w-28">
                             <button @click="ubahQty(item, item.quantity - 1)" class="px-2">-</button>
                             <span class="mx-2 w-6 text-center">{{ item.quantity || 1 }}</span>
                             <button @click="ubahQty(item, item.quantity + 1)" class="px-2">+</button>
                         </div>
                         <span class="text-green font-semibold w-28 text-right block">
-                            Rp {{ (item.harga * (item.quantity || 1)).toLocaleString() }}
+                            Rp {{ (item.product.price * (item.quantity || 1)).toLocaleString() }}
                         </span>
                         <button @click="hapusDariKeranjang(item.id)" class="ml-2 mr-5 flex justify-center">
                             <img src="/src/assets/trash.svg" alt="Hapus" class="w-7 h-7" />
@@ -49,7 +49,7 @@
 import Header from '../Header.vue';
 import Footer from '../Footer.vue';
 import Auth from '@/Service/auth';
-import ProdukService from '@/Service/Produk';
+import Keranjang from '@/Service/Keranjang';
 // import ProdukService from '@/Service/IndexDB/ProdukIDB';
 
 export default {
@@ -67,7 +67,7 @@ export default {
         totalTerpilih() {
             return this.keranjang
                 .filter(item => this.checkedItems.includes(item.id))
-                .reduce((sum, item) => sum + (item.harga * (item.quantity || 1)), 0);
+                .reduce((sum, item) => sum + (item.product.price * (item.quantity || 1)), 0);
         },
         isAllChecked() {
             return this.keranjang.length > 0 &&
@@ -76,19 +76,15 @@ export default {
     },
     methods: {
         async fetchKeranjang() {
-            this.keranjang = await ProdukService.getKeranjang();
+            this.keranjang = await Keranjang.getKeranjang();
         },
         async hapusDariKeranjang(id) {
-            await ProdukService.removeFromKeranjang(id);
+            await Keranjang.removeFromKeranjang(id);
             await this.fetchKeranjang();
         },
         async ubahQty(item, qty) {
-            if (qty < 1) {
-                await this.hapusDariKeranjang(item.id);
-            } else {
-                await ProdukService.updateQtyKeranjang(item.id, qty);
-                await this.fetchKeranjang();
-            }
+            await Keranjang.updateQtyKeranjang(item.id, qty);
+            await this.fetchKeranjang();
         },
         toggleCheckAll(e) {
             if (e.target.checked) {
@@ -98,8 +94,7 @@ export default {
             }
         },
         pesanBarang() {
-            localStorage.setItem('checkout-items', JSON.stringify(this.checkedItems));
-            this.$router.push('/bayar');
+            Keranjang.bayar(this.checkedItems, this.$router);
         }
     },
     async mounted() {

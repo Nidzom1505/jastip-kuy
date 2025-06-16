@@ -5,9 +5,9 @@
             <div v-if="items.length">
                 <ul class="mb-4">
                     <li v-for="item in items" :key="item.id" class="flex justify-between items-center border-b py-2">
-                        <span>{{ item.nama }} <span class="text-gray-500">x{{ item.quantity || 1 }}</span></span>
+                        <span>{{ item.product.name }} <span class="text-gray-500">x{{ item.quantity || 1 }}</span></span>
                         <span class="font-semibold text-green-700">
-                            Rp {{ (item.harga * (item.quantity || 1)).toLocaleString() }}
+                            Rp {{ (item.product.price * (item.quantity || 1)).toLocaleString() }}
                         </span>
                     </li>
                 </ul>
@@ -36,7 +36,7 @@
 
 <script>
 import Auth from '@/Service/auth';
-import ProdukService from '../../Service/Produk';
+import Keranjang from '@/Service/Keranjang';
 import { prosesPembayaran } from '@/Service/Pesan';
 // import ProdukService from '@/Service/IndexDB/ProdukIDB';
 // import { prosesPembayaran } from '@/Service/IndexDB/pesanIDB';
@@ -51,7 +51,7 @@ export default {
     },
     computed: {
         total() {
-            return this.items.reduce((sum, item) => sum + (item.harga * (item.quantity || 1)), 0);
+            return this.items.reduce((sum, item) => sum + (item.product.price * (item.quantity || 1)), 0);
         }
     },
     methods: {
@@ -73,7 +73,7 @@ export default {
     async mounted() {
         Auth.checkLogin(this);
         const checkedIds = JSON.parse(localStorage.getItem('checkout-items') || '[]');
-        const keranjang = await ProdukService.getKeranjang();
+        const keranjang = await Keranjang.getKeranjang();
         this.items = keranjang.filter(item => checkedIds.includes(item.id));
     }
 }

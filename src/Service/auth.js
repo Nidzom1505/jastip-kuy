@@ -1,8 +1,11 @@
 class Auth {
+  constructor() {
+    this.user = localStorage.getItem("token");
+  }
+
   async checkLogin(vm) {
     try {
-      const user = JSON.parse(localStorage.getItem("user-info"));
-      if (!user) {
+      if (!this.user) {
         vm.$router.push("/login");
       }
     } catch (error) {
@@ -13,8 +16,7 @@ class Auth {
 
   async checkToken(vm) {
     try {
-      const user = JSON.parse(localStorage.getItem("user-info"));
-      if (user) {
+      if (this.user) {
         vm.$router.push("/");
       }
     } catch (error) {
